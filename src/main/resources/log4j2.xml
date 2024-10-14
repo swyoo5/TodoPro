@@ -13,6 +13,9 @@
         <logger name="org.pgm" level="INFO" additivity="false">
             <appender-ref ref="console"/>
         </logger>
+        <logger name="org.pgm.todopro.mapper" level="INFO" additivity="false">
+            <appender-ref ref="console"/>
+        </logger>
         <root level="INFO" additivity="false">
             <AppenderRef ref="console"/>
         </root>

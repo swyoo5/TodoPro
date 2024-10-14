@@ -11,7 +11,18 @@
     <insert id="insert">
         insert into tbl_todo(title, dueDate, writer) values(#{title}, #{dueDate}, #{writer})
     </insert>
+    <select id="selectOne" resultType="org.pgm.todopro.vo.TodoVO">
+        select * from tbl_todo where tno=#{tno}
+    </select>
     <select id="getList" resultType="org.pgm.todopro.vo.TodoVO">
         select * from tbl_todo
     </select>
+    <select id="delete">
+<!--        # : 파라미터로 받은 값-->
+        delete from tbl_todo where tno=#{tno}
+    </select>
+    <update id="update">
+        update tbl_todo set title=#{title}, dueDate=#{dueDate}, finished=#{finished}
+        where tno=#{tno}
+    </update>
 </mapper>

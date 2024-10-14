@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 @Log4j2
 @RequiredArgsConstructor
 public class TodoServiceImpl implements TodoService{
+//    final => autowired 할 수 없음
     private final TodoMapper todoMapper;
     private final ModelMapper modelMapper;
     @Override
@@ -30,9 +31,31 @@ public class TodoServiceImpl implements TodoService{
         System.out.println("service.getAll");
 //        vo로 고치는게 없다면
 //        return todoMapper.getList();
-        List<TodoDTO> dtoList = todoMapper.getList().stream()
-                .map(vo->modelMapper.map(vo, TodoDTO.class))
-                .collect(Collectors.toUnmodifiableList());
+        List<TodoDTO> dtoList = todoMapper.getList().stream() // VO => stram으로 만들어줌
+                .map(vo->modelMapper.map(vo, TodoDTO.class)) // vo를 꺼내와서 todoDTO 클래스에 매핑
+                .collect(Collectors.toUnmodifiableList()); // 리스트로 만들어줌
         return dtoList;
+    }
+
+    @Override
+    public TodoDTO getOne(int tno) {
+        log.info("service.getOne");
+        TodoVO todoVO = todoMapper.selectOne(tno);
+//        vo => dto 변환
+        TodoDTO todoDTO = modelMapper.map(todoVO, TodoDTO.class);
+        return todoDTO;
+    }
+
+    @Override
+    public void remove(Long tno) {
+        log.info("service remove");
+        todoMapper.delete(tno);
+    }
+
+    @Override
+    public void modify(TodoDTO todoDTO) {
+        log.info("service modify");
+        TodoVO todoVO = modelMapper.map(todoDTO, TodoVO.class);
+        todoMapper.update(todoVO);
     }
 }
