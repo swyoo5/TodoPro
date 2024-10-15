@@ -1,5 +1,6 @@
 package org.pgm.todopro.mapper;
 
+import org.pgm.todopro.dto.PageRequestDTO;
 import org.pgm.todopro.dto.TodoDTO;
 import org.pgm.todopro.vo.TodoVO;
 
@@ -12,4 +13,7 @@ public interface TodoMapper {
     TodoVO selectOne(int tno);
     void delete(Long tno);
     void update(TodoVO todoVO);
+    List<TodoVO> selectList(PageRequestDTO pageRequestDTO);
+    int getCount(PageRequestDTO pageRequestDTO);
+
 }

@@ -3,6 +3,7 @@ package org.pgm.todopro.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.pgm.todopro.dto.PageRequestDTO;
 import org.pgm.todopro.dto.TodoDTO;
 import org.pgm.todopro.service.TodoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,11 +48,22 @@ public class TodoController {
         todoService.register(todoDTO);
         return "redirect:/todo/list";
     }
-    @GetMapping("/list") // get방식으로 받음
+
+//    @GetMapping("/list") // get방식으로 받음
     public void list(Model model) {
         System.out.println("list"); // todo/list
         List<TodoDTO> todoList = todoService.getAll();
         model.addAttribute("todoList", todoList);
+    }
+
+    @GetMapping("/list")
+    public void list(@Valid PageRequestDTO pageRequestDTO, BindingResult bindingResult, Model model) {
+        log.info("list");
+        if (bindingResult.hasErrors()) {
+            pageRequestDTO = pageRequestDTO.builder().build();
+        }
+        model.addAttribute("pageRequestDTO", pageRequestDTO);
+        model.addAttribute("responseDTO", todoService.getList(pageRequestDTO));
     }
 
     @PostMapping("/remove")
@@ -71,7 +83,7 @@ public class TodoController {
     }
 
     @GetMapping({"/read", "/modify"})
-    public void read(@RequestParam("tno") int tno, Model model) {
+    public void read(@RequestParam("tno") int tno, PageRequestDTO pageRequestDTO, Model model) {
         log.info("read");
         TodoDTO todoDTO=todoService.getOne(tno);
         model.addAttribute("dto", todoDTO);
